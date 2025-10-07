@@ -1,0 +1,50 @@
+meta:
+  timezone: Asia/Singapore
+  default_interval: 60m
+  row_limit: 100000
+
+mssql:
+  default_profile: DatabaseLocal
+  profiles:
+    DatabaseLocal:
+      server: "localhost\\SQLEXPRESS"
+      database: 'AOM-Dev'
+      driver: 'ODBC Driver 18 for SQL Server'
+      encrypt: 'no'
+      trust_server_certificate: 'yes'
+      timeout: 30
+      auth:
+        user_env: MSSQL_LOCAL_USER
+        pwd_env: MSSQL_LOCAL_PWD
+      schemas:
+        ts: dbo
+        md: dbo
+        cp: dbo
+      tables:
+        timeseries: asset_data
+        metadata: asset_meta
+        checkpoints: checkpoints, checkpoints_writes
+      defaults:
+        signals: [vibration_rms, temp_c, current_a]
+        aggs: [mean, max, min, median]
+
+    AzureSQL:
+      server: 'yokogawa-sqlserver-x2g77kzajj6gy.database.windows.net'
+      database: 'AOM-Dev'
+      driver: 'ODBC Driver 18 for SQL Server'
+      encrypt: 'no'
+      trust_server_certificate: 'yes'
+      timeout: 30
+      auth:
+        user_env: AZURE_SQL_USER
+        pwd_env: AZURE_SQL_PWD
+      schemas:
+        ts: dbo
+        md: dbo
+        cp: dbo
+      tables:
+        timeseries: asset_data
+        metadata: asset_meta
+      defaults:
+        signals: [vibration_rms, temp_c, current_a]
+        aggs: [mean, max, min, median]

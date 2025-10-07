@@ -1,0 +1,100 @@
+meta:
+  provider: anthropic
+  default_profile: llm_claude
+  # When set, use local cache only (no network); can also be controlled by HF_HUB_OFFLINE=1
+  local_files_only: false
+  # Optional: logging level for LLM subsystem
+  log_level: INFO
+
+llm:
+  profiles:
+    local_smol:
+      # Core model identity
+      provider: huggingface
+      model_name: HuggingFaceTB/SmolLM3-3B
+
+      # Model loading options
+      load:
+        device_map: auto            # auto-shard across available devices
+        local_files_only: ${meta.local_files_only}
+        trust_remote_code: false    # set true only if model requires
+        dtype: auto                 # let HF decide; override with float16/bfloat16 if needed
+        revision: null              # pin a specific revision if required
+        max_memory: {0: "5GiB", "cpu": "16GiB"}
+
+      # Default generation parameters
+      generation:
+        max_new_tokens: 640
+        min_new_tokens: 32
+        temperature: 0.1
+        top_p: 0.7
+        do_sample: True
+        # no_repeat_ngram_size: 3
+        # repetition_penalty: 1.05
+        # eos_token_id / pad_token_id are inferred from tokenizer; override if necessary
+        eos_token_id: null
+        pad_token_id: null
+
+      # Tooling exposure (for LangChain/ToolNode or in proc tool registries)
+      tool:
+        enabled: true
+        name: local_summarize
+        default_max_new_tokens: 640
+
+      # App-specific conveniences (e.g., a summarize graph/node default)
+      apps:
+        summarize:
+            enabled: false
+            model_name: ${llm.profiles.local_smol.model_name}
+            defaults:
+              max_new_tokens: 640
+
+      # Operational guards
+      limits:
+        max_input_chars: 12000      # truncate/validate upstream as needed
+        max_total_tokens_hint: 8192 # for budgeting; model-dependent
+
+      # Environment integration hints (optional)
+      env:
+        # If
+    llm_claude:
+      # Core model identity
+      provider: anthropic
+      model_name: claude-sonnet-4-20250514
+
+      # Anthropic API configuration
+      api:
+        base_url: https://api.anthropic.com
+        version: "2023-06-01"       # sent as 'anthropic-version' header
+
+      # Default generation parameters (mapped to Anthropic's max_tokens/temperature/top_p)
+      generation:
+        max_new_tokens: 320
+        temperature: 0.2
+        top_p: 0.7
+
+      # Tooling exposure (for LangChain/ToolNode or in proc registries)
+      tool:
+        enabled: true
+        name: llm_summarize
+        default_max_new_tokens: 320
+
+      # App-specific conveniences
+      apps:
+        summarize:
+          enabled: true
+          model_name: ${llm.profiles.llm_claude.model_name}
+          defaults:
+            max_new_tokens: 320
+
+      # Operational guards
+      limits:
+        max_input_chars: 12000
+        max_total_tokens_hint: 8192
+
+      # Environment integration hints
+      env:
+        api_key_env: ANTHROPIC_API_KEY
+        model_env: ANTHROPIC_MODEL
+        export:
+          ANTHROPIC_MODEL: ${llm.profiles.llm_claude.model_name}

@@ -1,0 +1,53 @@
+
+# Qdrant Configuration
+qdrant:
+  # Qdrant server URL
+  url: "${QDRANT_URL}"
+
+  # API key for authentication (optional, from .env)
+  api_key: "${QDRANT_API_KEY}"
+
+  # Timeout for operations in seconds
+  timeout: 30
+
+  # Session management
+  session:
+    # Session timeout in minutes
+    timeout_minutes: 30
+
+    # Session cleanup interval in minutes
+    cleanup_interval: 60
+
+# Collection configurations
+collections:
+  # Conversation memory collection
+  conversation_memory:
+    name: "conversation_memory"
+    vector_size: 1024  # Claude Sonnet 4 embeddings
+    distance: "cosine"  # cosine, euclidean, or dot
+    description: "Stores conversation context and session data"
+
+  # Knowledge base collection (example for future use)
+  knowledge_base:
+    name: "knowledge_base"
+    vector_size: 1024
+    distance: "cosine"
+    description: "Stores technical documentation and knowledge articles"
+
+# Performance tuning (optional)
+performance:
+  # HNSW index parameters
+  hnsw:
+    m: 16  # Number of edges per node
+    ef_construct: 100  # Construction time/quality trade-off
+
+  # Indexing threshold
+  indexing_threshold: 20000  # Start indexing after this many vectors
+
+  # Payload indexing
+  payload_indexing:
+    # Fields to index for faster filtering
+    indexed_fields:
+      - session_id
+      - timestamp
+      - asset_id
