@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  lstm-scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lstm-anomaly-detector
+    restart: unless-stopped
+    
+    environment:
+      # Database connection
+      - DB_SERVER=yokogawa-sqlserver-x2g77kzajj6gy.database.windows.net
+      - DB_NAME=AOM-Dev
+      - DB_USER=xmadmin
+      - DB_PASSWORD=NnDmyJEfQkw9
+      
+      # Scheduler settings
+      - CHECK_INTERVAL=10
+      - MIN_RECORDS=100
+      - SOURCE_TABLE=compressor_normal_dataset3
+      
+      # Model settings
+      - MODEL_DIR=/app/models
+    
+    volumes:
+      # Mount logs and checkpoints to persist across restarts
+      - ./logs:/app/logs
+      - ./checkpoints:/app/checkpoints
+      - ./lstm_scheduler_checkpoint.txt:/app/lstm_scheduler_checkpoint.txt
+    
+    # Limit resources (optional)
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '1'
+          memory: 2G
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
