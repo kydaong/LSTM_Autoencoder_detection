@@ -11,20 +11,31 @@ import os
 
 
 # Add project root to path (same as before)
+<<<<<<< HEAD
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+=======
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+>>>>>>> 0f0f95c0902da01cc8e23a4b61ed7a0019366639
 sys.path.insert(0, project_root)
 
 from tools.sql_connect import SQLConnector
 
+<<<<<<< HEAD
 def load_model_components(model_path="models/compressor_autoencoder2.h5",
                           scaler_path="models/scaler2.pkl",
                           config_path="models/model_config2.pkl"):
+=======
+def load_model_components(model_path='compressor_autoencoder2.h5',
+                          scaler_path='scaler2.pkl',
+                          config_path='model_config2.pkl'):
+>>>>>>> 0f0f95c0902da01cc8e23a4b61ed7a0019366639
     """Load the saved model, scaler, and configuration"""
     print("="*70)
     print("LOADING MODEL COMPONENTS")
     print("="*70)
 
     try:
+<<<<<<< HEAD
         PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         full_model_path = os.path.join(PROJECT_ROOT, model_path) if not os.path.isabs(model_path) else model_path
         full_scaler_path = os.path.join(PROJECT_ROOT, scaler_path) if not os.path.isabs(scaler_path) else scaler_path
@@ -36,6 +47,25 @@ def load_model_components(model_path="models/compressor_autoencoder2.h5",
         print(f"📂 File exists? {os.path.exists(full_model_path)}")
         print(f"📂 Models folder exists? {os.path.exists(os.path.join(PROJECT_ROOT, 'models'))}")
         print(f"📂 Files in models folder: {os.listdir(os.path.join(PROJECT_ROOT, 'models')) if os.path.exists(os.path.join(PROJECT_ROOT, 'models')) else 'FOLDER NOT FOUND'}")
+=======
+        # Get the directory where models are stored
+        # Assuming models are in .venv/Scripts/ directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        # If models are in a different location, adjust this path
+        # For example, if they're in the project root:
+        # model_dir = os.path.dirname(os.path.dirname(script_dir))
+        
+        # Build full paths
+        full_model_path = os.path.join(script_dir, model_path) if not os.path.isabs(model_path) else model_path
+        full_scaler_path = os.path.join(script_dir, scaler_path) if not os.path.isabs(scaler_path) else scaler_path
+        full_config_path = os.path.join(script_dir, config_path) if not os.path.isabs(config_path) else config_path
+        
+        print(f"\n📂 Looking for files:")
+        print(f"   Model:  {full_model_path}")
+        print(f"   Scaler: {full_scaler_path}")
+        print(f"   Config: {full_config_path}")
+>>>>>>> 0f0f95c0902da01cc8e23a4b61ed7a0019366639
         
         # Check if files exist
         if not os.path.exists(full_model_path):
@@ -83,7 +113,11 @@ def load_model_components(model_path="models/compressor_autoencoder2.h5",
 
 from sqlalchemy import text  # Add this import at the top
 
+<<<<<<< HEAD
 def load_data_from_db(db_profile='AzureSQL', table_name='compressor_normal_dataset3', 
+=======
+def load_data_from_db(db_profile='DatabaseLocal', table_name='compressor_normal_dataset3', 
+>>>>>>> 0f0f95c0902da01cc8e23a4b61ed7a0019366639
                       compressor_id=None, limit=None):
     """
     Load test data from SQL Server database
@@ -102,7 +136,11 @@ def load_data_from_db(db_profile='AzureSQL', table_name='compressor_normal_datas
         # Initialize SQL connection
         print(f"\n📌 Connecting to database profile: {db_profile}")
         
+<<<<<<< HEAD
         sql_conn = SQLConnector(database='AOM-Dev', db_profile=db_profile)
+=======
+        sql_conn = SQLConnector(database='mssql', db_profile=db_profile)
+>>>>>>> 0f0f95c0902da01cc8e23a4b61ed7a0019366639
         
         # Check if connection was successful
         if sql_conn is None or not hasattr(sql_conn, 'engine') or sql_conn.engine is None:
@@ -175,7 +213,11 @@ def load_data_from_db(db_profile='AzureSQL', table_name='compressor_normal_datas
         traceback.print_exc()
         return None
     
+<<<<<<< HEAD
 def write_results_to_db(results, db_profile='AzureSQL', 
+=======
+def write_results_to_db(results, db_profile='DatabaseLocal', 
+>>>>>>> 0f0f95c0902da01cc8e23a4b61ed7a0019366639
                         table_name='anomaly_detection_results',
                         if_exists='replace'):  # Changed default to 'replace' for testing
     """
@@ -187,7 +229,11 @@ def write_results_to_db(results, db_profile='AzureSQL',
     
     try:
         # Initialize SQL connection
+<<<<<<< HEAD
         sql_conn = SQLConnector(database='AOM-Dev', db_profile=db_profile)  
+=======
+        sql_conn = SQLConnector(database='mssql', db_profile=db_profile)
+>>>>>>> 0f0f95c0902da01cc8e23a4b61ed7a0019366639
         
         if sql_conn is None or not hasattr(sql_conn, 'engine') or sql_conn.engine is None:
             print("❌ Failed to create database connection")
@@ -326,7 +372,11 @@ def create_sequences(data, sequence_length):
     return np.array(sequences)
 
 
+<<<<<<< HEAD
 def test_model_from_db(db_profile='AzureSQL',
+=======
+def test_model_from_db(db_profile='DatabaseLocal',
+>>>>>>> 0f0f95c0902da01cc8e23a4b61ed7a0019366639
                        source_table='compressor_normal_dataset3',
                        results_table='anomaly_detection_results',
                        compressor_id=None,
@@ -344,8 +394,14 @@ def test_model_from_db(db_profile='AzureSQL',
     print("="*70)
     
     # Load model components
+<<<<<<< HEAD
     model, scaler, threshold, feature_columns = load_model_components()
 
+=======
+    model, scaler, threshold, feature_columns = load_model_components(
+        model_path, scaler_path, config_path
+    )
+>>>>>>> 0f0f95c0902da01cc8e23a4b61ed7a0019366639
     
     if model is None:
         return None
@@ -443,7 +499,11 @@ def test_model_from_db(db_profile='AzureSQL',
 if __name__ == "__main__":
     # Test with database
     results = test_model_from_db(
+<<<<<<< HEAD
         db_profile='AzureSQL',
+=======
+        db_profile='DatabaseLocal',
+>>>>>>> 0f0f95c0902da01cc8e23a4b61ed7a0019366639
         source_table='compressor_normal_dataset3',
         results_table='anomaly_detection_results',
         compressor_id='Compressor_A',  # Optional: filter specific compressor
