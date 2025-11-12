@@ -564,8 +564,9 @@ def main(timer: func.TimerRequest):
     
     func.logging.info('Pipeline completed')
 ```
-## Production Model Deployment(Censored-image for client data confidentiality) 
+## Production Model Deployment
 **Seal Gas Health Analysis Overview**
+**(Censored-image for client data confidentiality)**
 
 The diagram illustrates the Seal Gas Health Analysis dashboard used to monitor and detect potential dry gas seal failures in centrifugal compressors. The upper section, Gas Seal Parameter, visualizes real-time and historical process parameters—such as filter differential pressure (filter_dp), seal gas differential pressure (seal_gas_diff_p), and seal gas flow (seal_gas_flow)—for multiple compressors over a selected time range. These parameters serve as key indicators of seal integrity and operating conditions. The lower section, LSTM Analysis, presents results from a Long Short-Term Memory (LSTM)-based anomaly detection model trained on normal operating data. The reconstruction error curve represents deviations between actual sensor readings and model predictions, while the threshold line marks the boundary beyond which deviations are considered abnormal. When the reconstruction error exceeds this threshold, it indicates potential seal degradation or failure onset. This predictive monitoring approach enables early fault detection, reducing unplanned downtime and improving compressor reliability.
 
